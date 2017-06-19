@@ -1,0 +1,37 @@
+version: '3'
+services:
+  e-commerce-db:
+    image: erpmicroservices/e-commerce-db:latest
+    ports:
+      - "5432:5432"
+
+  party-db:
+    image: erpmicroservices/party-db:latest
+    ports:
+      - "5433:5432"
+
+  admin_api:
+    image: thejimbarrows/walker_knocker_admin_api
+    build: .
+    links:
+      - e-commerce-db
+      - party-db
+    volumes:
+      - "./:/usr/src/app"
+    labels:
+      - "traefik.backend=walker_knocker_admin_api"
+      - "traefik.frontend.rule=PathPrefixStrip:/api/walker_knocker/admin"
+      - "traefik.port=80"
+      - "traefik.frontend.entryPoints=http"
+
+
+  traefik:
+    image: traefik
+    container_name: e-commerce-admin-services-traefik
+    command: --web --docker --docker.domain=docker.localhost --logLevel=DEBUG
+    ports:
+      - "80:80"
+      - "8080:8080"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /dev/null:/traefik.toml
