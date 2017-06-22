@@ -4,8 +4,6 @@ import {
 
 import moment from "moment";
 
-import database from "../database";
-
 var schema = buildSchema(`
 
   type GeographicBoundary {
@@ -26,12 +24,14 @@ var schema = buildSchema(`
   }
 
   type Query {
-    address: Address
+    addresses: [Address]
   }
 
 `);
 
-var root = {};
+var root = {
+  addresses: (args, context, graphql) => context.party_db.any("select id, end_point as street_address, directions from contact_mechanism where contact_mechanism_type_id = $1",context.contact_mechanism_types.get('Postal Address'))
+};
 export {
   schema,
   root
