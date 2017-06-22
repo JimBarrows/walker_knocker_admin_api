@@ -24,6 +24,18 @@ services:
       - "traefik.port=80"
       - "traefik.frontend.entryPoints=http"
 
+  db_admin:
+    image: thajeztah/pgadmin4
+    ports:
+      - "5050:5050"
+    links:
+      - e-commerce-db
+      - party-db
+    labels:
+      - "traefik.backend=walker_knocker_db_admin"
+      - "traefik.frontend.rule=PathPrefixStrip:/db_admin"
+      - "traefik.port=80"
+      - "traefik.frontend.entryPoints=http"
 
   traefik:
     image: traefik
