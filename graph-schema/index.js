@@ -35,8 +35,12 @@ const schema = buildSchema(`
     country_id: String!
   }
 
+  type CreateAddressResult {
+    id: String!
+  }
+
   type Mutation{
-    create_address( new_address: NewAddress!) : Address!
+    create_address( new_address: NewAddress!) : CreateAddressResult!
   }
 
   type Query {
