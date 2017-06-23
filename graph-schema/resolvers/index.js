@@ -40,3 +40,7 @@ export function addresses(args, context, graphql) {
                           });
   }));
 };
+
+export function create_address( args, context, graphql) {
+  return {};
+}

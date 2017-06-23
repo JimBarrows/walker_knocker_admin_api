@@ -8,7 +8,7 @@
     "db_admin": "docker run --detach --publish 5050:5050 --name walker-knocker-admin-api-pgadmin --network=walker_knocker_default --link walker-knocker-admin-api-db:walker-knocker-db thajeztah/pgadmin4",
     "push": "docker push thejimbarrows/walker_knocker_admin_api:latest",
     "start": "docker-compose up",
-    "test": "cucumber-js --tags @admin-service --compiler es6:babel-core/register"
+    "test": "cucumber-js --compiler es6:babel-core/register"
   },
   "repository": {
     "type": "git",
@@ -44,6 +44,7 @@
     "validator": "^7.0.0"
   },
   "devDependencies": {
+    "apollo-client": "^1.5.0",
     "axios": "^0.16.2",
     "chai": "^4.0.2",
     "cucumber": "^2.3.1"
