@@ -2,7 +2,7 @@ import {
   buildSchema
 } from 'graphql';
 
-import moment from "moment";
+import {addresses} from './resolvers';
 
 var schema = buildSchema(`
 
@@ -21,6 +21,7 @@ var schema = buildSchema(`
     city: GeographicBoundary!,
     state: GeographicBoundary!,
     zip_code: GeographicBoundary!,
+    country: GeographicBoundary!
   }
 
   type Query {
@@ -30,7 +31,7 @@ var schema = buildSchema(`
 `);
 
 var root = {
-  addresses: (args, context, graphql) => context.party_db.any("select id, end_point as street_address, directions from contact_mechanism where contact_mechanism_type_id = $1",context.contact_mechanism_types.get('Postal Address'))
+  addresses
 };
 export {
   schema,
