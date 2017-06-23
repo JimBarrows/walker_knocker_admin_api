@@ -4,7 +4,7 @@ import Promise from 'bluebird';
 
 export function addresses(args, context, graphql) {
   let party_db = context.party_db;
-  return party_db.any("select id, end_point as street_address, directions from contact_mechanism where contact_mechanism_type_id = $1",context.contact_mechanism_types.get('Postal Address'))
+  return party_db.any("select id, end_point as street_address, directions from contact_mechanism where contact_mechanism_type_id = $1 order by end_point",context.contact_mechanism_types.get('Postal Address'))
     .then(address_list => address_list.map( address => {
       let city_query = party_db.any(`select geographic_boundary.id, geo_code, name, abbreviation
                                 from geographic_boundary, geographic_boundary_type, contact_mechanism_geographic_boundary
