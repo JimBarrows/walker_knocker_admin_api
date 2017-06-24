@@ -22,3 +22,8 @@ Feature: Create, read, update and delete addresses
     Given an existing address "1123 Carriagae Road", "Phoenix", "Arizona", "85037", "United States"
     When I change the street address to "6124 Academy Rd"
     Then the new street address is in the database
+
+    Scenario: Administrators can delete a street address
+      Given an existing address "1123 Carriagae Road", "Phoenix", "Arizona", "85037", "United States"
+      When I delete the address
+      Then the address is not in the database

@@ -4,9 +4,14 @@ import {
   buildSchema
 } from 'graphql';
 
-import {addresses, change_address, create_address} from './resolvers';
+import {addresses, change_address, create_address, delete_address} from './resolvers';
 
 const schema = buildSchema(`
+
+  enum ResultType {
+    success
+    failure
+  }
 
   type GeographicBoundary {
     id: ID!,
@@ -44,9 +49,13 @@ const schema = buildSchema(`
     id: String!
   }
 
+  type DeleteAddressResult {
+    result: ResultType!
+  }
   type Mutation{
     create_address( new_address: InputAddress!) : CreateAddressResult!
     change_address( modified_address: InputAddress!) : UpdateAddressResult!
+    delete_address( id: ID!) : DeleteAddressResult!
   }
 
   type Query {
@@ -58,7 +67,8 @@ const schema = buildSchema(`
 const root = {
   addresses,
   change_address,
-  create_address
+  create_address,
+  delete_address
 };
 
 export {

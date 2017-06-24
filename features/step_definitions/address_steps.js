@@ -139,6 +139,20 @@ defineSupportCode(function({Given, When, Then}) {
     }).then(results => this.result.data = results);
   });
 
+  When('I delete the address', function() {
+    let client = this.client;
+    return client.mutate({
+      mutation: gql `mutation delete_address($id: ID!) {
+                        delete_address(id: $id) {
+                          result
+                        }
+                    }`,
+      variables: {
+        "id": this.address.id
+      }
+    }).then(results => this.result.data = results);
+  });
+
   Then('there must be {int} street addresses in the response', function(int, callback) {
     expect(this.result.error).to.be.empty;
     expect(this.result.data).to.be.ok;
@@ -218,9 +232,18 @@ defineSupportCode(function({Given, When, Then}) {
 
   Then('the new street address is in the database', function() {
     let new_street_address = this.new_street_address;
-    return this.party_db.one("select end_point, directions from contact_mechanism where id=$1", this.address.id)
-    .then((result) => {
+    return this.party_db.one("select end_point, directions from contact_mechanism where id=$1", this.address.id).then((result) => {
       expect(result.end_point).to.be.equal(new_street_address);
+    })
+  });
+
+  Then('the address is not in the database', function() {
+    let contact_mechanism_query = this.party_db.any("select end_point from contact_mechanism where id=$1", this.address.id);
+    let contact_mechanism_geographic_boundary_query = this.party_db.any("select id from contact_mechanism_geographic_boundary where contact_mechanism_id = $1", this.address.id);
+    return Promise.all([contact_mechanism_query, contact_mechanism_geographic_boundary_query])
+    .spread((contact_mechanisms, contact_mechanism_geographic_boundaries) => {
+      expect(contact_mechanisms).to.be.empty;
+      expect( contact_mechanism_geographic_boundaries).to.be.empty;
     })
   });
 });

@@ -59,3 +59,10 @@ export function create_address(args, context, graphql) {
     .then(() => ({id: result.id}));
   });
 }
+
+export function delete_address(args, context, graphql) {
+  let party_db =context.party_db;
+  return party_db.none("delete from contact_mechanism_geographic_boundary where contact_mechanism_id = $1", args.id)
+  .then(() => party_db.none("delete from contact_mechanism where id = $1", args.id))
+  .then(() => ({result:"success"}));
+}
