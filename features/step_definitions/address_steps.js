@@ -17,10 +17,10 @@ defineSupportCode(function({Given, When, Then}) {
         "directions " + i,
         this.postal_address.id
       ]).then(address => {
-        let city = this.party_db.none("insert into contact_mechanism_geographic_boundary (contact_mechanism_id, geographic_boundary_id) values ($1, $2)", [address.id, this.city.id]);
-        let state = this.party_db.none("insert into contact_mechanism_geographic_boundary (contact_mechanism_id, geographic_boundary_id) values ($1, $2)", [address.id, this.state.id]);
-        let zip = this.party_db.none("insert into contact_mechanism_geographic_boundary (contact_mechanism_id, geographic_boundary_id) values ($1, $2)", [address.id, this.zip_code.id]);
-        let country = this.party_db.none("insert into contact_mechanism_geographic_boundary (contact_mechanism_id, geographic_boundary_id) values ($1, $2)", [address.id, this.country.id]);
+        let city = this.party_db.none("insert into contact_mechanism_geographic_boundary (contact_mechanism_id, geographic_boundary_id) values ($1, $2)", [address.id, this.cities.get("Phoenix")]);
+        let state = this.party_db.none("insert into contact_mechanism_geographic_boundary (contact_mechanism_id, geographic_boundary_id) values ($1, $2)", [address.id, this.states.get("Arizona")]);
+        let zip = this.party_db.none("insert into contact_mechanism_geographic_boundary (contact_mechanism_id, geographic_boundary_id) values ($1, $2)", [address.id, this.zip_codes.get("85037")]);
+        let country = this.party_db.none("insert into contact_mechanism_geographic_boundary (contact_mechanism_id, geographic_boundary_id) values ($1, $2)", [address.id, this.countries.get("United States")]);
         return Promise.all([city, state, zip, country]);
       }));
     }
@@ -33,28 +33,45 @@ defineSupportCode(function({Given, When, Then}) {
   });
 
   Given('a city of {stringInDoubleQuotes}', function(city, callback) {
-    this.address.city = this.city.id;
+    this.address.city = this.cities.get(city);
     callback();
   });
 
   Given('a state of {stringInDoubleQuotes}', function(state, callback) {
-    this.address.state = this.state.id;
+    this.address.state = this.states.get(state);
     callback();
   });
 
   Given('a zip code of {stringInDoubleQuotes}', function(zip_code, callback) {
-    this.address.zip_code = this.zip_code.id;
+    this.address.zip_code = this.zip_codes.get(zip_code);
     callback();
   });
 
   Given('a country of {stringInDoubleQuotes}', function(country, callback) {
-    this.address.country = this.country.id;
+    this.address.country = this.countries.get(country);
     callback();
+  });
+
+  Given('an existing address {stringInDoubleQuotes}, {stringInDoubleQuotes}, {stringInDoubleQuotes}, {stringInDoubleQuotes}, {stringInDoubleQuotes}', function(street_address, city, state, zip_code, country) {
+    this.address.street_address = street_address;
+    this.address.city = this.cities.get(city);
+    this.address.state = this.states.get(state);
+    this.address.zip_code = this.zip_codes.get(zip_code);
+    this.address.country = this.countries.get(country);
+    let party_db = this.party_db;
+    let new_address = this.address;
+    return party_db.one('insert into contact_mechanism (end_point, directions, contact_mechanism_type_id) values( $1, $2, $3) returning id', [new_address.street_address, new_address.directions, this.postal_address.id]).then(result => {
+      let city = party_db.none("insert into contact_mechanism_geographic_boundary (contact_mechanism_id, geographic_boundary_id) values ($1, $2)", [result.id, this.address.city]);
+      let state = party_db.none("insert into contact_mechanism_geographic_boundary (contact_mechanism_id, geographic_boundary_id) values ($1, $2)", [result.id, this.address.state]);
+      let zip = party_db.none("insert into contact_mechanism_geographic_boundary (contact_mechanism_id, geographic_boundary_id) values ($1, $2)", [result.id, this.address.zip_code]);
+      let country = party_db.none("insert into contact_mechanism_geographic_boundary (contact_mechanism_id, geographic_boundary_id) values ($1, $2)", [result.id, this.address.country]);
+      return Promise.all([city, state, zip, country]).then(() => this.address.id = result.id);
+    });
   });
 
   When('I save the address', function() {
     return this.client.mutate({
-      mutation: gql `mutation create_address($newAddress: NewAddress!) {
+      mutation: gql `mutation create_address($newAddress: InputAddress!) {
                       create_address(new_address: $newAddress) {
                         id
                       }
@@ -97,6 +114,29 @@ defineSupportCode(function({Given, When, Then}) {
         }
       }}
     `}).then(results => this.result.data = results);
+  });
+
+  When('I change the street address to {stringInDoubleQuotes}', function(new_street_address) {
+    let client = this.client;
+    this.new_street_address = new_street_address;
+    return client.mutate({
+      mutation: gql `mutation change_address($modified_address: InputAddress!) {
+                      change_address(modified_address: $modified_address) {
+                        id
+                      }
+                    }`,
+      variables: {
+        "modified_address": {
+          "id": this.address.id,
+          "street_address": new_street_address,
+          "directions": this.address.directions,
+          "city_id": this.address.city,
+          "state_id": this.address.state,
+          "zip_code_id": this.address.zip_code,
+          "country_id": this.address.country
+        }
+      }
+    }).then(results => this.result.data = results);
   });
 
   Then('there must be {int} street addresses in the response', function(int, callback) {
@@ -174,5 +214,13 @@ defineSupportCode(function({Given, When, Then}) {
         return address;
       });
     }));
+  });
+
+  Then('the new street address is in the database', function() {
+    let new_street_address = this.new_street_address;
+    return this.party_db.one("select end_point, directions from contact_mechanism where id=$1", this.address.id)
+    .then((result) => {
+      expect(result.end_point).to.be.equal(new_street_address);
+    })
   });
 });

@@ -4,7 +4,7 @@ import {
   buildSchema
 } from 'graphql';
 
-import {addresses, create_address} from './resolvers';
+import {addresses, change_address, create_address} from './resolvers';
 
 const schema = buildSchema(`
 
@@ -26,7 +26,8 @@ const schema = buildSchema(`
     country: GeographicBoundary!
   }
 
-  input NewAddress {
+  input InputAddress {
+    id: String,
     street_address: String!,
     directions: String,
     city_id: String!,
@@ -39,8 +40,13 @@ const schema = buildSchema(`
     id: String!
   }
 
+  type UpdateAddressResult {
+    id: String!
+  }
+
   type Mutation{
-    create_address( new_address: NewAddress!) : CreateAddressResult!
+    create_address( new_address: InputAddress!) : CreateAddressResult!
+    change_address( modified_address: InputAddress!) : UpdateAddressResult!
   }
 
   type Query {
@@ -51,6 +57,7 @@ const schema = buildSchema(`
 
 const root = {
   addresses,
+  change_address,
   create_address
 };
 

@@ -17,3 +17,8 @@ Feature: Create, read, update and delete addresses
     And a country of "United States"
     When I save the address
     Then the address should be in the database
+
+  Scenario: Administrators can update a street address
+    Given an existing address "1123 Carriagae Road", "Phoenix", "Arizona", "85037", "United States"
+    When I change the street address to "6124 Academy Rd"
+    Then the new street address is in the database
