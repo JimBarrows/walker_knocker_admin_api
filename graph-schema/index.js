@@ -4,7 +4,7 @@ import {
   buildSchema
 } from 'graphql';
 
-import {addresses, change_address, create_address, delete_address} from './resolvers';
+import {addresses, change_address, cities, create_address, delete_address, states, zip_codes} from './resolvers';
 
 const schema = buildSchema(`
 
@@ -60,6 +60,9 @@ const schema = buildSchema(`
 
   type Query {
     addresses: [Address]
+    cities(name: String!): [GeographicBoundary],
+    states(name: String!): [GeographicBoundary],
+    zip_codes(name: String!): [GeographicBoundary]
   }
 
 `);
@@ -67,8 +70,11 @@ const schema = buildSchema(`
 const root = {
   addresses,
   change_address,
+  cities,
   create_address,
-  delete_address
+  delete_address,
+  states,
+  zip_codes
 };
 
 export {

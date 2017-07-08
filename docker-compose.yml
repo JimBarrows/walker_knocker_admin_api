@@ -6,7 +6,7 @@ services:
       - "5432:5432"
 
   party-db:
-    image: erpmicroservices/party-db:latest
+    image: erpmicroservices/party-db:2.1.0
     ports:
       - "5433:5432"
 

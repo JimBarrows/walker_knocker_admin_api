@@ -169,13 +169,11 @@ defineSupportCode(function({Given, When, Then}) {
       expect(address.directions).to.be.equal("directions " + count);
       expect(address.city.id).to.be.ok;
       expect(address.city.name).to.be.equal("Phoenix");
-      expect(address.city.abbreviation).to.be.equal('PHX');
       expect(address.state.id).to.be.ok;
       expect(address.state.name).to.be.equal("Arizona");
       expect(address.state.abbreviation).to.be.equal('AZ');
       expect(address.zip_code.id).to.be.ok;
       expect(address.zip_code.name).to.be.equal("85037");
-      expect(address.zip_code.abbreviation).to.be.equal('PHX');
       count++;
     })
     callback();
@@ -217,13 +215,11 @@ defineSupportCode(function({Given, When, Then}) {
         expect(address.directions).to.be.equal(this.address.directions);
         expect(address.city.id).to.be.ok;
         expect(address.city.name).to.be.equal("Phoenix");
-        expect(address.city.abbreviation).to.be.equal('PHX');
         expect(address.state.id).to.be.ok;
         expect(address.state.name).to.be.equal("Arizona");
         expect(address.state.abbreviation).to.be.equal('AZ');
         expect(address.zip_code.id).to.be.ok;
         expect(address.zip_code.name).to.be.equal("85037");
-        expect(address.zip_code.abbreviation).to.be.equal('PHX');
 
         return address;
       });
