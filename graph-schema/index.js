@@ -28,7 +28,7 @@ const schema = buildSchema(`
     city: GeographicBoundary!,
     state: GeographicBoundary!,
     zip_code: GeographicBoundary!,
-    country: GeographicBoundary!
+    country: GeographicBoundary
   }
 
   input InputAddress {
@@ -38,7 +38,7 @@ const schema = buildSchema(`
     city_id: String!,
     state_id: String!,
     zip_code_id: String!,
-    country_id: String!
+    country_id: String
   }
 
   type CreateAddressResult {
