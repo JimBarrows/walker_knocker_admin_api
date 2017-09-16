@@ -1,61 +1,13 @@
 // graph-schema/index.js
 
 import {
-  buildSchema
+	buildSchema
 } from 'graphql';
 
-import {addresses, change_address, cities, create_address, delete_address, states, zip_codes} from './resolvers';
+import {addresses, change_address, city, cities, create_address, delete_address, state, states, zip_code, zip_codes} from '../resolvers';
 
 const schema = buildSchema(`
 
-  type GeographicBoundary {
-    id: ID!,
-    geo_code: String,
-    name: String,
-    abbreviation: String,
-    geographic_boundary_type_id: String
-  }
-
-  type Address {
-    id: ID!
-    street_address: String,
-    directions: String,
-    city: GeographicBoundary!,
-    state: GeographicBoundary!,
-    zip_code: GeographicBoundary!
-  }
-
-  input InputAddress {
-    id: String,
-    street_address: String!,
-    directions: String,
-    city_id: String!,
-    state_id: String!,
-    zip_code_id: String!
-  }
-
-  type CreateAddressSuccess {
-    id: String!
-  }
-  
-  type MutationError {
-    id_in_error: String,
-    field_name: String,
-    error: String!
-  }
-
-  type ChangeAddressSuccess {
-    id: String!
-  }
-
-  type DeleteAddressSuccess {
-    result: ResultType!
-  }
-  
-  union CreateAddressResult = CreateAddressSuccess | MutationError
-  union ChangeAddressResult = ChangeAddressSuccess | MutationError
-  union DeleteAddressResult = DeleteAddressSuccess | MutationError
-  
   type Mutation{
     create_address( new_address: InputAddress!) : CreateAddressResult!
     change_address( modified_address: InputAddress!) : ChangeAddressResult!
@@ -72,16 +24,23 @@ const schema = buildSchema(`
 `);
 
 const root = {
-  addresses,
-  change_address,
-  cities,
-  create_address,
-  delete_address,
-  states,
-  zip_codes
+
+		addresses,
+
+	Address: {
+		city,
+		state,
+		zip_code
+	},
+	change_address,
+	cities,
+	create_address,
+	delete_address,
+	states,
+	zip_codes
 };
 
 export {
-  schema,
-  root
+	schema,
+	root
 };
