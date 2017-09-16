@@ -1,8 +1,7 @@
+// type_defs/index.js
+
 import Address from "./address";
-import ChangeAddressSuccess from "./change_address_success";
 import City from "./city";
-import CreateAddressSuccess from "./create_address_success";
-import DeleteAddressSuccess from "./delete_address_success";
 import GeographicBoundary from "./geographic_boundary";
 import InputAddress from "./input_address";
 import MutationError from "./mutation_error";
@@ -12,30 +11,35 @@ import unions from "./unions";
 import ZipCode from "./zip_code";
 
 const Query = `
-  type Query {
-    addresses: [Address!]!
-  }
+type Query {
+  addresses: [Address!]!
+}
+`;
+
+const Mutation = `
+type Mutation {
+	create_address( new_address: InputAddress!) : Address!
+}
 `;
 
 const SchemaDefinition = `
-  schema {
-    query: Query
-  }
+schema {
+  query: Query
+  mutation: Mutation
+}
 `;
 
 export default [
 	SchemaDefinition,
+	Mutation,
 	Query,
 	Address,
-	ChangeAddressSuccess,
 	City,
-	CreateAddressSuccess,
-	DeleteAddressSuccess,
 	GeographicBoundary,
 	InputAddress,
-	MutationError,
+	// MutationError,
 	ResultType,
 	State,
-	unions,
+	// unions,
 	ZipCode
 ];

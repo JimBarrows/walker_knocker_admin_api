@@ -1,5 +1,5 @@
 export default `
-union CreateAddressResult = CreateAddressSuccess | MutationError
-union ChangeAddressResult = ChangeAddressSuccess | MutationError
-union DeleteAddressResult = DeleteAddressSuccess | MutationError
+union CreateAddressResult = Address | MutationError
+union ChangeAddressResult = Address | MutationError
+union DeleteAddressResult = ResultType | MutationError
 `;

@@ -10,6 +10,7 @@ import {party_db, e_commerce_db} from "./database";
 import typeDefs from "./type_defs";
 import resolvers from "./resolvers";
 
+
 const schema = makeExecutableSchema({typeDefs, resolvers});
 
 const app = express();

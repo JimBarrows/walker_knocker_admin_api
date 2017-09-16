@@ -1,9 +1,4 @@
 export default function (obj, args, context, graphql) {
-	console.log("City function");
-	console.log("obj: " , obj);
-	console.log("args: ", args);
-	console.log("context: ", context);
-	console.log("graphql: ", graphql);
 	return context.party_db.one(`select geographic_boundary.id, geo_code, name, abbreviation
                                 from geographic_boundary, geographic_boundary_type, contact_mechanism_geographic_boundary
                                 where geographic_boundary_type.description like 'City'
