@@ -11,12 +11,20 @@ import ZipCode from "./zip_code";
 const Query = `
 type Query {
   addresses: [Address!]!
+  cities : [City!]!
+  cities(name: String): [City!]!
+  states : [State!]!
+  states(name: String) : [State!]!
+  zip_codes : [ZipCode!]! 
+  zip_codes(name: String) : [ZipCode!]!
 }
 `;
 
 const Mutation = `
 type Mutation {
-	create_address( new_address: InputAddress!) : Address!
+	address_create( new_address: InputAddress!) : Address!
+	address_delete( id: ID!) : ResultType!
+	address_update( modified_address: InputAddress!) : Address!
 }
 `;
 
@@ -35,9 +43,7 @@ export default [
 	City,
 	GeographicBoundary,
 	InputAddress,
-	// MutationError,
 	ResultType,
 	State,
-	// unions,
 	ZipCode
 ];
