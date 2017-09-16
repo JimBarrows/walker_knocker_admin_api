@@ -22,7 +22,7 @@ Promise.all([contact_mechansim_query, united_states_query]).spread(function (con
 	app.use(bodyParser.json());
 	let contact_mechanism_types = new Map();
 	contact_mechanism_result.forEach(l => contact_mechanism_types.set(l.description, l.id));
-	app.use('/graphql', graphqlExpress({
+	app.use('/', graphqlExpress({
 		schema,
 		context: {
 			party_db,

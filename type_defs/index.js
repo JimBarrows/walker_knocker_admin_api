@@ -4,10 +4,8 @@ import Address from "./address";
 import City from "./city";
 import GeographicBoundary from "./geographic_boundary";
 import InputAddress from "./input_address";
-import MutationError from "./mutation_error";
 import ResultType from "./result_type";
 import State from "./state";
-import unions from "./unions";
 import ZipCode from "./zip_code";
 
 const Query = `
