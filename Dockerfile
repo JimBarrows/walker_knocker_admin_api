@@ -11,4 +11,4 @@ RUN npm install --global nodemon babel-core babel-cli
 RUN npm install
 COPY . /usr/src/app
 
-CMD [ "nodemon", "index.js", "--exec", "babel-node"]
+CMD [ "nodemon", "server.js", "--exec", "babel-node"]

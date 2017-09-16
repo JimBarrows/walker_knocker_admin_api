@@ -14,9 +14,17 @@ Feature: Create, read, update and delete addresses
     And a city of "Phoenix"
     And a state of "Arizona"
     And a zip code of "85037"
-    And a country of "United States"
     When I save the address
     Then the address should be in the database
+
+  Scenario: Administrators get an error when a city is not provided
+    Given an address of "1123 Carriage Road"
+    And a city is not present
+    And a state of "Arizona"
+    And a zip code of "85037"
+    When I save the address
+    Then An error is returned noting the city must be present
+    And the address is not in the database
 
   Scenario: Administrators can update a street address
     Given an existing address "1123 Carriagae Road", "Phoenix", "Arizona", "85037", "United States"
