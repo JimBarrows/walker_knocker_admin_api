@@ -1,6 +1,6 @@
 {
 	"name": "walker_knocker_admin_api",
-	"version": "0.0.0",
+	"version": "0.1.0",
 	"description": "Adminsitrative services for the walker knocker administrators.",
 	"main": "index.js",
 	"scripts": {
