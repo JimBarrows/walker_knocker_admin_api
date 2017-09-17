@@ -69,8 +69,8 @@ defineSupportCode(function ({Given, When, Then}) {
 
 	When('I save the address', function () {
 		return this.client.mutate({
-			mutation : gql `mutation create_address($newAddress: InputAddress!) {
-                      create_address(new_address: $newAddress) {
+			mutation : gql `mutation address_create($newAddress: InputAddress!) {
+                      address_create(new_address: $newAddress) {
                         id
                       }
                     }`,
@@ -115,8 +115,8 @@ defineSupportCode(function ({Given, When, Then}) {
 		let client              = this.client;
 		this.new_street_address = new_street_address;
 		return client.mutate({
-			mutation : gql `mutation change_address($modified_address: InputAddress!) {
-                      change_address(modified_address: $modified_address) {
+			mutation : gql `mutation address_update($modified_address: InputAddress!) {
+                      address_update(modified_address: $modified_address) {
                         id
                       }
                     }`,
@@ -136,10 +136,8 @@ defineSupportCode(function ({Given, When, Then}) {
 	When('I delete the address', function () {
 		let client = this.client;
 		return client.mutate({
-			mutation : gql `mutation delete_address($id: ID!) {
-                        delete_address(id: $id) {
-                          result
-                        }
+			mutation : gql `mutation address_delete($id: ID!) {
+                        address_delete(id: $id) 
                     }`,
 			variables: {
 				"id": this.address.id
