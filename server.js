@@ -32,9 +32,5 @@ Promise.all([contact_mechansim_query, united_states_query]).spread(function (con
 		}
 	}));
 
-	if (config.graphql.graphiql) {
-		app.use("/graphiql", graphiqlExpress({endpointURL: config.graphql.endpointURL}));
-	}
-
 	app.listen(config.server.port, () => console.log('%s listening at %s', config.server.name, config.server.url));
 });
